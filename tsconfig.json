@@ -10,7 +10,8 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strictNullChecks": true,
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "build"]

@@ -3,7 +3,7 @@ import {createApplication} from "./app";
 const app = createApplication();
 
 const options = {
-  port: parseInt(process.env.PORT) || 8000,
+  port: Number(process.env.PORT || 8080),
 };
 
 app.listen(options, (err, addr) => {

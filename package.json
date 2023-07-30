@@ -8,6 +8,7 @@
     "lint": "eslint --cache . --ext .ts",
     "build": "yarn clean && tsc -p tsconfig.json",
     "start": "yarn build && node build/server.js",
+    "dev": "ts-node src/server.ts",
     "clean": "rimraf -rf build",
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,ts,tsx,json,yml,yaml}\""
   },
@@ -28,6 +29,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
-    "fastify": "^4.21.0"
+    "fastify": "^4.21.0",
+    "zod": "^3.21.4"
   }
 }
