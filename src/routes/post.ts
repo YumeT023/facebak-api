@@ -2,7 +2,6 @@ import {FastifyPluginCallback, FastifyRequest} from "fastify";
 import {prisma} from "../lib/db";
 import {badRequestError, notFoundError} from "../util/error";
 import {SavePost} from "../lib/validation";
-import {ZodError} from "zod";
 
 const routes: FastifyPluginCallback = (fastify, _, done) => {
   fastify.get("/", async (_, reply) => {
@@ -33,8 +32,7 @@ const routes: FastifyPluginCallback = (fastify, _, done) => {
       });
       reply.send(saved);
     } catch (e) {
-      console.log("error: ", e);
-      reply.status(400).send(badRequestError("payload is not valid"));
+      reply.status(400).send(badRequestError("ensure provided payload is valid "));
       return reply;
     }
   });

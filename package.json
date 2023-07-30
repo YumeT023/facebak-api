@@ -8,7 +8,7 @@
     "lint": "eslint --cache . --ext .ts",
     "build": "yarn clean && tsc -p tsconfig.json",
     "start": "yarn build && node build/server.js",
-    "dev": "ts-node src/server.ts",
+    "dev": "tsx src/server.ts",
     "clean": "rimraf -rf build",
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,ts,tsx,json,yml,yaml}\""
   },
@@ -24,7 +24,7 @@
     "prettier": "^3.0.0",
     "prisma": "^5.0.0",
     "rimraf": "^5.0.1",
-    "ts-node": "^10.9.1",
+    "tsx": "^3.12.7",
     "typescript": "^5.1.6"
   },
   "dependencies": {
