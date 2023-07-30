@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "newline": "lf",
+    "newLine": "lf",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "module": "esnext",
+    "module": "commonjs",
     "outDir": "build",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strictNullChecks": true,
   },
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "build"]
 }

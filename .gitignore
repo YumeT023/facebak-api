@@ -4,3 +4,6 @@ build
 
 # ignore this now 
 .env
+
+# IDE
+.idea
