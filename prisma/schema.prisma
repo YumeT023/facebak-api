@@ -11,9 +11,9 @@ datasource db {
 }
 
 model Post {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title String? @db.VarChar(50)
-  content String
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String?   @db.VarChar(50)
+  content   String
 }

@@ -1,4 +1,5 @@
 import fastify from "fastify";
+import {Post} from "./routes";
 
 const DEFAULT_OPTIONS = {
   logger: true,
@@ -7,7 +8,7 @@ const DEFAULT_OPTIONS = {
 export const createApplication = (opts: Record<string, unknown> = {}) => {
   const app = fastify({...DEFAULT_OPTIONS, ...opts});
 
-  // TODO: add 'routes'
+  app.register(Post, {prefix: "/posts"});
 
   return app;
 };
