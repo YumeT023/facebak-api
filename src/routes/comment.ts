@@ -34,6 +34,34 @@ const routes: FastifyPluginCallback = (fastify, _, done) => {
     }
   );
 
+  fastify.get(
+    "/posts/:pid/comments",
+    async (req: FastifyRequest<{Params: {pid: string}}>, reply) => {
+      try {
+        const postId = req.params.pid;
+        const post = await prisma.post.findUnique({
+          where: {
+            id: postId,
+          },
+        });
+
+        // ensure post with the provided 'pid' exists
+        if (!post) {
+          reply.status(404).send(notFoundError("Post", "id", postId));
+          return reply;
+        }
+
+        return await prisma.comment.findMany({
+          where: {
+            postId,
+          },
+        });
+      } catch (e) {
+        reply.status(400).send(badRequestError("ensure provided payload is valid"));
+      }
+    }
+  );
+
   done();
 };
 
