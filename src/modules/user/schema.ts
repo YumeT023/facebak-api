@@ -4,19 +4,19 @@ export const commonFields = {
   bio: z.string().optional(),
   photo: z.string().optional(),
   password: z.string().min(8),
-  confirmPassword: z.string().min(8),
 };
 
 export const createUserDto = z.object({
   ...commonFields,
   email: z.string().email(),
-  username: z.string().max(50),
+  username: z.string().min(5).max(50),
+  confirmPassword: z.string().min(8),
 });
 
 export const updateUserDto = z.object({
   ...commonFields,
-  email: z.string().email().optional(),
-  username: z.string().max(50).optional(),
+  email: z.string().email(),
+  username: z.string().min(5).max(50).optional(),
 });
 
 export type CreateUserDto = z.infer<typeof createUserDto>;

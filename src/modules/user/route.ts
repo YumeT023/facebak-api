@@ -1,5 +1,10 @@
 import {FastifyPluginCallback} from "fastify";
-import {createUserHandler, getUsersHandler} from "./controller";
+import {
+  createUserHandler,
+  getUserByIdHandler,
+  getUsersHandler,
+  updateUserHandler,
+} from "./controller";
 import {$ref} from "../shared";
 
 export const userRoutes: FastifyPluginCallback = (server, _, done) => {
@@ -13,6 +18,18 @@ export const userRoutes: FastifyPluginCallback = (server, _, done) => {
       },
     },
     createUserHandler
+  );
+
+  server.get("/users/:uid", getUserByIdHandler);
+
+  server.put(
+    "/users",
+    {
+      schema: {
+        body: $ref("updateUserDto"),
+      },
+    },
+    updateUserHandler
   );
 
   done();
