@@ -6,8 +6,9 @@ export const PostModel = z.object({
   content: z.string().nonempty(),
 });
 
-export const CommentModelType = z.object({
+export const CommentModel = z.object({
   content: z.string().nonempty(),
 });
 
 export type PostModelType = z.infer<typeof PostModel>;
+export type CommentModelType = z.infer<typeof CommentModel>;

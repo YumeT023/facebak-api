@@ -1,33 +1,14 @@
 import {FastifyPluginCallback, FastifyRequest} from "fastify";
-import {CommentModel} from "../lib/validation";
-import {prisma} from "../lib/db";
-import {badRequestError, notFoundError} from "../util/error";
+import {badRequestError} from "../util/error";
+import {commentService} from "../services/comment.service";
 
 const routes: FastifyPluginCallback = (fastify, _, done) => {
   fastify.post(
     "/posts/:pid/comments",
     async (req: FastifyRequest<{Params: {pid: string}}>, reply) => {
       try {
-        const comment = CommentModel.parse(req.body);
         const postId = req.params.pid;
-        const post = await prisma.post.findUnique({
-          where: {
-            id: postId,
-          },
-        });
-
-        // ensure post with the provided 'pid' exists
-        if (!post) {
-          reply.status(404).send(notFoundError("Post", "id", postId));
-          return reply;
-        }
-
-        return await prisma.comment.create({
-          data: {
-            ...comment,
-            postId,
-          },
-        });
+        return await commentService.create(req.body, postId);
       } catch (e) {
         reply.status(400).send(badRequestError("ensure provided payload is valid"));
       }
@@ -39,25 +20,9 @@ const routes: FastifyPluginCallback = (fastify, _, done) => {
     async (req: FastifyRequest<{Params: {pid: string}}>, reply) => {
       try {
         const postId = req.params.pid;
-        const post = await prisma.post.findUnique({
-          where: {
-            id: postId,
-          },
-        });
-
-        // ensure post with the provided 'pid' exists
-        if (!post) {
-          reply.status(404).send(notFoundError("Post", "id", postId));
-          return reply;
-        }
-
-        return await prisma.comment.findMany({
-          where: {
-            postId,
-          },
-        });
+        return await commentService.findByPostId(postId);
       } catch (e) {
-        reply.status(400).send(badRequestError("ensure provided payload is valid"));
+        reply.status(400).send(e);
       }
     }
   );
