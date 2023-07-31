@@ -1,5 +1,5 @@
 import {prisma} from "../../lib/db";
-import {badRequestError, notFoundError} from "../../util/error";
+import {badRequestError, notFoundError, conflictError} from "../../util/error";
 import {CreateUserDto, UpdateUserDto} from "./schema";
 import {hash, compare} from "bcrypt";
 
@@ -7,26 +7,41 @@ export const getUsers = () => {
   return prisma.user.findMany();
 };
 
-export const getUserById = (uid: string) => {
-  return prisma.user.findUnique({
+export const getUserById = async (uid: string) => {
+  const user = await prisma.user.findUnique({
     where: {
       id: uid,
     },
   });
+
+  if (!user) {
+    throw notFoundError("User", "id", uid);
+  }
+  return user;
 };
 
 export const createUser = async (data: CreateUserDto) => {
-  const {password, confirmPassword, ...user} = data;
+  const {password, confirmPassword, email} = data;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (user) {
+    throw conflictError(`An user.email=${email} is already registered`);
+  }
 
   if (password !== confirmPassword) {
-    return badRequestError("Password should match");
+    throw badRequestError("Password should match");
   }
 
   const passwordHash = await hash(password, 10);
 
   return prisma.user.create({
     data: {
-      ...user,
+      ...data,
       password: passwordHash,
     },
   });
@@ -48,7 +63,7 @@ export const updateUser = async (data: UpdateUserDto) => {
   const match = await compare(user.password, persisted.password);
 
   if (!match) {
-    throw badRequestError("Password should match");
+    throw badRequestError("Password should match to complete the change");
   }
 
   user.password = persisted.password;

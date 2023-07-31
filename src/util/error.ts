@@ -1,19 +1,19 @@
 export const HttpErrorCodes = {
-  404: "NOT_FOUND",
-  400: "BAD_REQUEST",
+  404: "Not Found",
+  400: "Bad Request",
+  409: "Conflict",
 } as const;
 
-export interface HttpError {
-  name: string;
+export interface HttpError extends Omit<Error, "name"> {
   statusCode: keyof typeof HttpErrorCodes;
-  message: string;
+  error: string;
 }
 
-const createError = (statusCode: keyof typeof HttpErrorCodes, message: string) => {
+const createHttpError = (statusCode: keyof typeof HttpErrorCodes, message: string): HttpError => {
   return {
     statusCode,
     message,
-    name: HttpErrorCodes[statusCode],
+    error: HttpErrorCodes[statusCode],
   };
 };
 
@@ -29,11 +29,15 @@ export function notFoundError(messageOrResource: string, field?: string, value?:
   // ...field argument is provided!, it matches the 2nd overload, with 'resource
   if (field) {
     const message = `${messageOrResource}.${field}=${value} is not found.`;
-    return createError(404, message);
+    return createHttpError(404, message);
   }
-  return createError(404, messageOrResource);
+  return createHttpError(404, messageOrResource);
 }
 
 export const badRequestError = (message: string) => {
-  return createError(400, message);
+  return createHttpError(400, message);
+};
+
+export const conflictError = (message: string) => {
+  return createHttpError(409, message);
 };

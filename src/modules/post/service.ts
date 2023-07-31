@@ -1,4 +1,5 @@
 import {prisma} from "../../lib/db";
+import {notFoundError} from "../../util/error";
 import {CreatePostDto} from "./schema";
 
 export const getAll = () => {
@@ -18,8 +19,8 @@ export const savePost = (data: CreatePostDto) => {
   });
 };
 
-export const getPostById = (id: string) => {
-  return prisma.post.findUnique({
+export const getPostById = async (id: string) => {
+  const post = await prisma.post.findUnique({
     where: {
       id,
     },
@@ -27,4 +28,9 @@ export const getPostById = (id: string) => {
       comments: true,
     },
   });
+
+  if (!post) {
+    throw notFoundError("Post", "id", id);
+  }
+  return post;
 };
