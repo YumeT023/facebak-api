@@ -1,16 +1,15 @@
-import fastify from "fastify";
-import {Post, Comment} from "./routes";
+import {buildServer} from "./server";
 
-const DEFAULT_OPTIONS = {
-  logger: true,
+const app = buildServer();
+
+const options = {
+  port: Number(process.env.PORT || 8080),
 };
 
-export const createApplication = (opts: Record<string, unknown> = {}) => {
-  const app = fastify({...DEFAULT_OPTIONS, ...opts});
-
-  // do not want to use prefix here
-  app.register(Post);
-  app.register(Comment);
-
-  return app;
-};
+app.listen(options, (err, addr) => {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+  console.log("Server running at", addr);
+});
