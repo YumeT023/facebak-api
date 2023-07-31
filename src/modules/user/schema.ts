@@ -17,6 +17,8 @@ export const updateUserDto = z.object({
   ...commonFields,
   email: z.string().email(),
   username: z.string().min(5).max(50).optional(),
+  newPassword: z.string().min(8).optional(),
+  confirmNewPassword: z.string().min(8).optional(),
 });
 
 export type CreateUserDto = z.infer<typeof createUserDto>;

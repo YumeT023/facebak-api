@@ -33,7 +33,7 @@ export const createUser = async (data: CreateUserDto) => {
 };
 
 export const updateUser = async (data: UpdateUserDto) => {
-  const {password, email, ...user} = data;
+  const {email, ...user} = data;
 
   const persisted = await prisma.user.findUnique({
     where: {
@@ -45,11 +45,23 @@ export const updateUser = async (data: UpdateUserDto) => {
     throw notFoundError("User", "email", email);
   }
 
-  const match = await compare(password, persisted.password);
+  const match = await compare(user.password, persisted.password);
 
   if (!match) {
     throw badRequestError("Password should match");
   }
+
+  user.password = persisted.password;
+
+  if (user.newPassword) {
+    if (user.newPassword !== user.confirmNewPassword) {
+      throw badRequestError("'newPassword' & 'confirmNewPassword' should match");
+    }
+    user.password = await hash(user.newPassword, 10);
+  }
+
+  user.newPassword = undefined;
+  user.confirmNewPassword = undefined;
 
   return prisma.user.update({
     where: {
