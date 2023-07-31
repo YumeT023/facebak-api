@@ -26,6 +26,7 @@ export const getPostById = async (id: string) => {
     },
     include: {
       comments: true,
+      reactions: true,
     },
   });
 
