@@ -6,4 +6,8 @@ export const SavePost = z.object({
   content: z.string().nonempty(),
 });
 
+export const CommentModel = z.object({
+  content: z.string().nonempty(),
+});
+
 export type SavePostType = z.infer<typeof SavePost>;
