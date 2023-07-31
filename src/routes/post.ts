@@ -1,36 +1,44 @@
 import {FastifyPluginCallback, FastifyRequest} from "fastify";
 import {prisma} from "../lib/db";
 import {badRequestError, notFoundError} from "../util/error";
-import {SavePost} from "../lib/validation";
+import {PostModel} from "../lib/validation";
 
 const routes: FastifyPluginCallback = (fastify, _, done) => {
-  fastify.get("/", async (_, reply) => {
-    const posts = await prisma.post.findMany();
-    reply.send(posts);
+  fastify.get("/posts", async () => {
+    return await prisma.post.findMany();
   });
 
-  fastify.get("/:id", async (req: FastifyRequest<{Params: {id: string}}>, reply) => {
+  fastify.get("/posts/:id", async (req: FastifyRequest<{Params: {id: string}}>, reply) => {
     const id: string = req.params?.id;
-    const post = await prisma.post.findUnique({where: {id}});
+    const post = await prisma.post.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        comments: true,
+      },
+    });
 
     if (!post) {
       reply.status(404).send(notFoundError("Post", "id", id));
       return reply;
     }
-    reply.send(post);
+    return post;
   });
 
-  fastify.put("/", async (req, reply) => {
+  fastify.put("/posts", async (req, reply) => {
     try {
-      const post = SavePost.parse(req.body);
-      const saved = await prisma.post.upsert({
+      const post = PostModel.parse(req.body);
+      return await prisma.post.upsert({
         where: {
           id: post.id ?? "",
+        },
+        include: {
+          comments: true,
         },
         update: post,
         create: post,
       });
-      reply.send(saved);
     } catch (e) {
       reply.status(400).send(badRequestError("ensure provided payload is valid "));
       return reply;

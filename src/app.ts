@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import {Post} from "./routes";
+import {Post, Comment} from "./routes";
 
 const DEFAULT_OPTIONS = {
   logger: true,
@@ -8,7 +8,9 @@ const DEFAULT_OPTIONS = {
 export const createApplication = (opts: Record<string, unknown> = {}) => {
   const app = fastify({...DEFAULT_OPTIONS, ...opts});
 
-  app.register(Post, {prefix: "/posts"});
+  // do not want to use prefix here
+  app.register(Post);
+  app.register(Comment);
 
   return app;
 };
