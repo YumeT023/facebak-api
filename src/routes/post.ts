@@ -1,7 +1,7 @@
 import {FastifyPluginCallback, FastifyRequest} from "fastify";
 import {prisma} from "../lib/db";
 import {badRequestError, notFoundError} from "../util/error";
-import {SavePost} from "../lib/validation";
+import {PostModel} from "../lib/validation";
 
 const routes: FastifyPluginCallback = (fastify, _, done) => {
   fastify.get("/posts", async () => {
@@ -28,7 +28,7 @@ const routes: FastifyPluginCallback = (fastify, _, done) => {
 
   fastify.put("/posts", async (req, reply) => {
     try {
-      const post = SavePost.parse(req.body);
+      const post = PostModel.parse(req.body);
       return await prisma.post.upsert({
         where: {
           id: post.id ?? "",

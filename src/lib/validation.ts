@@ -1,13 +1,13 @@
 import z from "zod";
 
-export const SavePost = z.object({
+export const PostModel = z.object({
   id: z.string().optional(),
   title: z.string().optional(),
   content: z.string().nonempty(),
 });
 
-export const CommentModel = z.object({
+export const CommentModelType = z.object({
   content: z.string().nonempty(),
 });
 
-export type SavePostType = z.infer<typeof SavePost>;
+export type PostModelType = z.infer<typeof PostModel>;
