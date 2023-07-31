@@ -11,12 +11,26 @@ datasource db {
 }
 
 model Post {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  title     String?   @db.VarChar(50)
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  title     String?    @db.VarChar(50)
   content   String
   comments  Comment[]
+  reactions Reaction[]
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
+}
+
+model Reaction {
+  id     String       @id @default(uuid())
+  type   ReactionType
+  postId String
+  Post   Post         @relation(fields: [postId], references: [id])
+  userId String
 }
 
 model Comment {
