@@ -1,5 +1,6 @@
 import {FastifyRequest} from "fastify";
-import {getPostReactions} from "./service";
+import {getPostReactions, saveReaction} from "./service";
+import {ReactionInputDto} from "./schema";
 
 export const getPostReactionsHandler = async (
   req: FastifyRequest<{
@@ -9,4 +10,15 @@ export const getPostReactionsHandler = async (
   }>
 ) => {
   return await getPostReactions(req.params.pid);
+};
+
+export const saveReactionHandler = (
+  req: FastifyRequest<{
+    Body: ReactionInputDto;
+    Params: {
+      pid: string;
+    };
+  }>
+) => {
+  return saveReaction(req.body, req.params.pid);
 };
