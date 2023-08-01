@@ -3,6 +3,7 @@ import {commentRoutes} from "./modules/comment";
 import {postRoutes} from "./modules/post";
 import {schemas} from "./modules/shared";
 import {userRoutes} from "./modules/user";
+import {reactionRoutes} from "./modules/reaction";
 
 const DEFAULT_OPTIONS = {};
 
@@ -20,6 +21,7 @@ export const buildServer = (opts: Record<string, unknown> = {}) => {
   server.register(commentRoutes);
   server.register(postRoutes);
   server.register(userRoutes);
+  server.register(reactionRoutes);
 
   return server;
 };
