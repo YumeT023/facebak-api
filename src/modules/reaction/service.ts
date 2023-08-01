@@ -1,13 +1,44 @@
 import {prisma} from "../../lib/db";
+import {notFoundError} from "../../util/error";
 import {getPostById} from "../post/service";
 import {getUserById} from "../user/service";
-import {ReactionInputDto} from "./schema";
+import {ReactionDeleteDto, ReactionInputDto} from "./schema";
 
 export const getPostReactions = async (postId: string) => {
   const post = await getPostById(postId);
   return prisma.reaction.findMany({
     where: {
       postId: post.id,
+    },
+  });
+};
+
+export const getReactionById = async (userId: string, postId: string) => {
+  const reaction = await prisma.reaction.findUnique({
+    where: {
+      userId_postId: {
+        userId,
+        postId,
+      },
+    },
+  });
+
+  if (!reaction) {
+    throw notFoundError("Reaction", "userId_postId", `${userId}-${postId}`);
+  }
+  return reaction;
+};
+
+export const deleteReaction = async (data: ReactionDeleteDto, postId: string) => {
+  const post = await getPostById(postId);
+  const user = await getUserById(data.userId);
+  await getReactionById(user.id, post.id);
+  return prisma.reaction.delete({
+    where: {
+      userId_postId: {
+        userId: user.id,
+        postId: post.id,
+      },
     },
   });
 };

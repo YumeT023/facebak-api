@@ -1,6 +1,6 @@
 import {FastifyRequest} from "fastify";
-import {getPostReactions, saveReaction} from "./service";
-import {ReactionInputDto} from "./schema";
+import {deleteReaction, getPostReactions, saveReaction} from "./service";
+import {ReactionDeleteDto, ReactionInputDto} from "./schema";
 
 export const getPostReactionsHandler = async (
   req: FastifyRequest<{
@@ -10,6 +10,17 @@ export const getPostReactionsHandler = async (
   }>
 ) => {
   return await getPostReactions(req.params.pid);
+};
+
+export const deleteReactionHandler = (
+  req: FastifyRequest<{
+    Body: ReactionDeleteDto;
+    Params: {
+      pid: string;
+    };
+  }>
+) => {
+  return deleteReaction(req.body, req.params.pid);
 };
 
 export const saveReactionHandler = (

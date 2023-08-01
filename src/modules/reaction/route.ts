@@ -1,5 +1,5 @@
 import {FastifyPluginCallback} from "fastify";
-import {getPostReactionsHandler, saveReactionHandler} from "./controller";
+import {deleteReactionHandler, getPostReactionsHandler, saveReactionHandler} from "./controller";
 import {$ref} from "../shared";
 
 export const reactionRoutes: FastifyPluginCallback = (server, _, done) => {
@@ -13,6 +13,16 @@ export const reactionRoutes: FastifyPluginCallback = (server, _, done) => {
       },
     },
     saveReactionHandler
+  );
+
+  server.delete(
+    "/posts/:pid/reactions",
+    {
+      schema: {
+        body: $ref("reactionDeleteDto"),
+      },
+    },
+    deleteReactionHandler
   );
 
   done();
