@@ -21,7 +21,7 @@ export const getUserById = async (uid: string) => {
 };
 
 export const createUser = async (data: CreateUserDto) => {
-  const {password, confirmPassword, email} = data;
+  const {password, confirmPassword, email, ...rest} = data;
 
   const user = await prisma.user.findUnique({
     where: {
@@ -41,7 +41,8 @@ export const createUser = async (data: CreateUserDto) => {
 
   return prisma.user.create({
     data: {
-      ...data,
+      ...rest,
+      email,
       password: passwordHash,
     },
   });
