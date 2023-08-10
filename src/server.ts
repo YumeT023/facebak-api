@@ -1,9 +1,10 @@
 import fastify from "fastify";
-import {commentRoutes} from "./modules/comment";
-import {postRoutes} from "./modules/post";
-import {schemas} from "./modules/shared";
-import {userRoutes} from "./modules/user";
-import {reactionRoutes} from "./modules/reaction";
+import fastifyCors from "@fastify/cors";
+import { commentRoutes } from "./modules/comment";
+import { postRoutes } from "./modules/post";
+import { schemas } from "./modules/shared";
+import { userRoutes } from "./modules/user";
+import { reactionRoutes } from "./modules/reaction";
 
 const DEFAULT_OPTIONS = {};
 
@@ -16,6 +17,13 @@ export const buildServer = (opts: Record<string, unknown> = {}) => {
   schemas.forEach((schema) => {
     server.addSchema(schema);
   });
+
+  server.register(fastifyCors, {
+    origin: "http://localhost:3000",
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+  
 
   // do not want to use prefix here
   server.register(commentRoutes);
