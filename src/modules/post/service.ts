@@ -17,10 +17,7 @@ export const savePost = async (data: CreatePostDto) => {
   }
 
   if (data.id) {
-    const record = await getPostById(data.id);
-    if (!record) {
-      throw notFoundError("Post", "id", data.id);
-    }
+    await getPostById(data.id);
   }
 
   const post = await prisma.post.upsert({

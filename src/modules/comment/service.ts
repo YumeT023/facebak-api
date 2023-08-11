@@ -5,25 +5,24 @@ import {getPostById} from "../post/service";
 import {getUserById} from "../user/service";
 import {CreateCommentDto} from "./schema";
 
-export const createComment = async (
+export const saveComment = async (
   data: CreateCommentDto & {
     postId: string;
   }
 ) => {
-  const post = await getPostById(data.postId);
+  await getPostById(data.postId);
+  await getUserById(data.userId);
 
-  if (!post) {
-    throw notFoundError("Post", "id", data.postId);
+  if (data.id) {
+    await getCommentById(data.id);
   }
 
-  const user = await getUserById(data.userId);
-
-  if (!user) {
-    throw notFoundError("User", "id", data.postId);
-  }
-
-  const comment = await prisma.comment.create({
-    data,
+  const comment = await prisma.comment.upsert({
+    where: {
+      id: data.id ?? "",
+    },
+    create: data,
+    update: data,
     include: {
       user: true,
     },
@@ -46,4 +45,16 @@ export const getCommentsByPostId = async (postId: string) => {
     (comment as Record<string, unknown>).user = omit(comment.user, ["password"]);
     return comment;
   });
+};
+
+export const getCommentById = async (id: string) => {
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!comment) {
+    throw notFoundError("Comment", "id", id);
+  }
+  return comment;
 };
