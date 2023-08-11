@@ -1,10 +1,10 @@
 import fastify from "fastify";
 import cors from "@fastify/cors";
-import { commentRoutes } from "./modules/comment";
-import { postRoutes } from "./modules/post";
-import { schemas } from "./modules/shared";
-import { userRoutes } from "./modules/user";
-import { reactionRoutes } from "./modules/reaction";
+import {commentRoutes} from "./modules/comment";
+import {postRoutes} from "./modules/post";
+import {schemas} from "./modules/shared";
+import {userRoutes} from "./modules/user";
+import {reactionRoutes} from "./modules/reaction";
 
 const DEFAULT_OPTIONS = {};
 
