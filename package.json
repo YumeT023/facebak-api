@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint --cache . --ext .ts",
-    "build": "yarn clean && tsc -p tsconfig.json",
-    "start": "yarn build && node build/server.js",
+    "build": "npm run  clean && tsc -p tsconfig.json",
+    "start": "npm run  build && node build/server.js",
     "dev": "tsx src/app.ts",
     "clean": "rimraf -rf build",
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,ts,tsx,json,yml,yaml}\""
