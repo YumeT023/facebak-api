@@ -10,11 +10,7 @@ export const getAll = () => {
 };
 
 export const savePost = async (data: CreatePostDto) => {
-  const user = await getUserById(data.userId);
-
-  if (!user) {
-    throw notFoundError("User", "id", data.userId);
-  }
+  await getUserById(data.userId);
 
   if (data.id) {
     await getPostById(data.id);
