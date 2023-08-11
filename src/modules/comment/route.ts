@@ -1,16 +1,16 @@
 import {FastifyPluginCallback} from "fastify";
-import {createCommentHandler, getCommentByPostIdHandler} from "./controller";
+import {saveCommentHandler, getCommentByPostIdHandler} from "./controller";
 import {$ref} from "../shared";
 
 export const commentRoutes: FastifyPluginCallback = (server, _, done) => {
-  server.post(
+  server.put(
     "/posts/:pid/comments",
     {
       schema: {
         body: $ref("commentDto"),
       },
     },
-    createCommentHandler
+    saveCommentHandler
   );
 
   server.get("/posts/:pid/comments", getCommentByPostIdHandler);

@@ -1,10 +1,13 @@
 import {prisma} from "../../lib/db";
 import {badRequestError, notFoundError, conflictError} from "../../util/error";
+import {omit} from "../../util/object-util";
 import {CreateUserDto, UpdateUserDto} from "./schema";
 import {hash, compare} from "bcrypt";
 
-export const getUsers = () => {
-  return prisma.user.findMany();
+// TODO: use dedicated `mapper` to map from internal object to rest object
+export const getUsers = async () => {
+  const users = await prisma.user.findMany();
+  return users.map((user) => omit(user, ["password"]));
 };
 
 export const getUserById = async (uid: string) => {
@@ -17,7 +20,7 @@ export const getUserById = async (uid: string) => {
   if (!user) {
     throw notFoundError("User", "id", uid);
   }
-  return user;
+  return omit(user, ["password"]);
 };
 
 export const createUser = async (data: CreateUserDto) => {
@@ -39,13 +42,14 @@ export const createUser = async (data: CreateUserDto) => {
 
   const passwordHash = await hash(password, 10);
 
-  return prisma.user.create({
+  const record = await prisma.user.create({
     data: {
       ...rest,
       email,
       password: passwordHash,
     },
   });
+  return omit(record, ["password"]);
 };
 
 export const updateUser = async (data: UpdateUserDto) => {
@@ -79,10 +83,11 @@ export const updateUser = async (data: UpdateUserDto) => {
   user.newPassword = undefined;
   user.confirmNewPassword = undefined;
 
-  return prisma.user.update({
+  const record = await prisma.user.update({
     where: {
       email,
     },
     data: user,
   });
+  return omit(record, ["password"]);
 };

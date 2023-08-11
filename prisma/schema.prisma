@@ -16,6 +16,8 @@ model Post {
   updatedAt DateTime   @updatedAt
   title     String?    @db.VarChar(50)
   content   String
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
   comments  Comment[]
   reactions Reaction[]
 }
@@ -28,7 +30,7 @@ enum ReactionType {
 model Reaction {
   type   ReactionType
   postId String
-  Post   Post         @relation(fields: [postId], references: [id])
+  post   Post         @relation(fields: [postId], references: [id])
   userId String
 
   @@id([userId, postId])
@@ -41,14 +43,18 @@ model Comment {
   content   String
   postId    String
   post      Post     @relation(fields: [postId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id       String   @id @default(uuid())
-  email    String   @unique
-  password String   @db.VarChar(100)
-  username String   @db.VarChar(50)
-  joinedAt DateTime @default(now())
+  id       String    @id @default(uuid())
+  email    String    @unique
+  password String    @db.VarChar(100)
+  username String    @db.VarChar(50)
+  joinedAt DateTime  @default(now())
   bio      String?
   photo    String? // 'url' or 'base64' or whatever is okay, though 'url' is the best
+  post     Post[]
+  comment  Comment[]
 }

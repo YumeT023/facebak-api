@@ -1,8 +1,8 @@
 import {FastifyRequest} from "fastify";
 import {CreateCommentDto} from "./schema";
-import {createComment, getCommentsByPostId} from "./service";
+import {saveComment, getCommentsByPostId} from "./service";
 
-export const createCommentHandler = async (
+export const saveCommentHandler = async (
   req: FastifyRequest<{
     Body: CreateCommentDto;
     Params: {
@@ -11,7 +11,7 @@ export const createCommentHandler = async (
   }>
 ) => {
   const postId = req.params.pid;
-  return await createComment({
+  return await saveComment({
     ...req.body,
     postId,
   });
