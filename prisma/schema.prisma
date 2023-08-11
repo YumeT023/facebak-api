@@ -16,6 +16,8 @@ model Post {
   updatedAt DateTime   @updatedAt
   title     String?    @db.VarChar(50)
   content   String
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
   comments  Comment[]
   reactions Reaction[]
 }
@@ -51,4 +53,5 @@ model User {
   joinedAt DateTime @default(now())
   bio      String?
   photo    String? // 'url' or 'base64' or whatever is okay, though 'url' is the best
+  Post     Post[]
 }
