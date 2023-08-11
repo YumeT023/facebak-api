@@ -2,7 +2,7 @@ import {prisma} from "../../lib/db";
 import {notFoundError} from "../../util/error";
 import {omit} from "../../util/object-util";
 import {getUserById} from "../user/service";
-import {CreatePostDto, RestUserDto} from "./schema";
+import {CreatePostDto} from "./schema";
 
 // TODO: use dedicated `mapper` to map from internal object to rest object
 export const getAll = () => {
@@ -28,7 +28,7 @@ export const savePost = async (data: CreatePostDto) => {
     create: data,
   });
 
-  (post as RestUserDto).user = omit(post.user, ["password"]);
+  (post as Record<string, unknown>).user = omit(post.user, ["password"]);
   return post;
 };
 
@@ -48,6 +48,6 @@ export const getPostById = async (id: string) => {
     throw notFoundError("Post", "id", id);
   }
 
-  (post as RestUserDto).user = omit(post.user, ["password"]);
+  (post as Record<string, unknown>).user = omit(post.user, ["password"]);
   return post;
 };
