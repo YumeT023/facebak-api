@@ -5,8 +5,16 @@ import {getUserById} from "../user/service";
 import {CreatePostDto} from "./schema";
 
 // TODO: use dedicated `mapper` to map from internal object to rest object
-export const getAll = () => {
-  return prisma.post.findMany();
+export const getAll = async () => {
+  const posts = await prisma.post.findMany({
+    include: {
+      user: true,
+    },
+  });
+  return posts.map((post) => ({
+    ...post,
+    user: omit(post.user, ["password"]),
+  }));
 };
 
 export const savePost = async (data: CreatePostDto) => {
