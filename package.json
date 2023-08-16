@@ -15,6 +15,9 @@
   "engines": {
     "node": ">=16.17.0"
   },
+  "prisma": {
+    "seed": "tsx ./scripts/seed.ts"
+  },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/node": "^16.18.0",

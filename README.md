@@ -11,7 +11,7 @@ git clone https://github.com/YumeT023/facebak-api
 navigate to the project directory: `cd facebak-api`
 
 ```
-yarn install or npm install
+npm install
 ```
 
 ##### Sync your db with the Prisma migration
@@ -30,6 +30,12 @@ DATABASE_URL="postgresql://{{name}}:{{password}}@localhost:5432/{{database}}?sch
 
 ```
 npx prisma db push
+```
+
+#### Insert mock data into the db (OPTIONAL: if you want to have some data)
+
+```
+npx prisma db seed
 ```
 
 #### Run the dev server
