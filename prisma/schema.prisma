@@ -32,6 +32,7 @@ model Reaction {
   postId String
   post   Post         @relation(fields: [postId], references: [id])
   userId String
+  user   User         @relation(fields: [userId], references: [id])
 
   @@id([userId, postId])
 }
@@ -48,13 +49,14 @@ model Comment {
 }
 
 model User {
-  id       String    @id @default(uuid())
-  email    String    @unique
-  password String    @db.VarChar(100)
-  username String    @db.VarChar(50)
-  joinedAt DateTime  @default(now())
+  id       String     @id @default(uuid())
+  email    String     @unique
+  password String     @db.VarChar(100)
+  username String     @db.VarChar(50)
+  joinedAt DateTime   @default(now())
   bio      String?
   photo    String? // 'url' or 'base64' or whatever is okay, though 'url' is the best
   post     Post[]
   comment  Comment[]
+  reaction Reaction[]
 }
