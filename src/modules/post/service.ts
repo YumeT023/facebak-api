@@ -9,6 +9,12 @@ export const getAll = async () => {
   const posts = await prisma.post.findMany({
     include: {
       user: true,
+      _count:{
+        select:{
+          reactions:true,
+          comments:true
+        }
+      }
     },
   });
   return posts.map((post) => ({
