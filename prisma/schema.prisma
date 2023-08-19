@@ -11,13 +11,13 @@ datasource db {
 }
 
 model Post {
-  id        String     @id @default(uuid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  title     String?    @db.VarChar(50)
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String?   @db.VarChar(50)
   content   String
   userId    String
-  user      User       @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
   comments  Comment[]
   reactions Reaction[]
 }
@@ -30,8 +30,9 @@ enum ReactionType {
 model Reaction {
   type   ReactionType
   postId String
-  post   Post         @relation(fields: [postId], references: [id])
+  post   Post        @relation(fields: [postId], references: [id])
   userId String
+  user   User        @relation(fields: [userId], references: [id])
 
   @@id([userId, postId])
 }
@@ -57,4 +58,5 @@ model User {
   photo    String? // 'url' or 'base64' or whatever is okay, though 'url' is the best
   post     Post[]
   comment  Comment[]
+  reaction Reaction[]
 }
