@@ -5,6 +5,8 @@ declare module "fastify" {
     jwt: JWT;
   }
   export interface FastifyInstance {
-    authenticate: unknown;
+    // TODO: better typings
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    authenticate: any;
   }
 }
