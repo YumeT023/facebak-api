@@ -50,7 +50,7 @@ export const loginUserHandler = async (
   if (passwordDoesMatch) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const restUser = omit(user, ["password"]);
-    return {token: req.jwt.sign(restUser)};
+    return {token: req.jwt.sign(restUser), ...restUser};
   }
   throw unauthorizedError("Bad token");
 };
