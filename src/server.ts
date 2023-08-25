@@ -1,6 +1,7 @@
 import fastify, {FastifyReply, FastifyRequest} from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
+import {randomUUID} from "crypto";
 import {commentRoutes} from "./modules/comment";
 import {postRoutes} from "./modules/post";
 import {schemas} from "./modules/shared";
@@ -20,7 +21,8 @@ export const buildServer = (opts: Record<string, unknown> = {}) => {
   });
 
   server.register(jwt, {
-    secret: "ndkandna9u7dsy789adb",
+    // TODO: retrieve this secret from .env
+    secret: randomUUID(),
   });
 
   server.decorate("authenticate", async (req: FastifyRequest, reply: FastifyReply) => {
