@@ -9,7 +9,13 @@ import {
 import {$ref} from "../shared";
 
 export const userRoutes: FastifyPluginCallback = (server, _, done) => {
-  server.get("/users", getUsersHandler);
+  server.get(
+    "/users",
+    {
+      preHandler: [server.authenticate],
+    },
+    getUsersHandler
+  );
 
   server.post(
     "/users",
@@ -21,7 +27,13 @@ export const userRoutes: FastifyPluginCallback = (server, _, done) => {
     createUserHandler
   );
 
-  server.get("/users/:uid", getUserByIdHandler);
+  server.get(
+    "/users/:uid",
+    {
+      preHandler: [server.authenticate],
+    },
+    getUserByIdHandler
+  );
 
   server.put(
     "/users",

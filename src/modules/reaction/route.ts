@@ -8,6 +8,7 @@ export const reactionRoutes: FastifyPluginCallback = (server, _, done) => {
   server.post(
     "/posts/:pid/reactions",
     {
+      preHandler: [server.authenticate],
       schema: {
         body: $ref("reactionInputDto"),
       },
@@ -18,6 +19,7 @@ export const reactionRoutes: FastifyPluginCallback = (server, _, done) => {
   server.delete(
     "/posts/:pid/reactions",
     {
+      preHandler: [server.authenticate],
       schema: {
         body: $ref("reactionDeleteDto"),
       },
