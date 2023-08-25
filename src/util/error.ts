@@ -1,5 +1,6 @@
 export const HttpErrorCodes = {
   404: "Not Found",
+  401: "Unauthorized",
   400: "Bad Request",
   409: "Conflict",
 } as const;
@@ -36,6 +37,10 @@ export function notFoundError(messageOrResource: string, field?: string, value?:
 
 export const badRequestError = (message: string) => {
   return createHttpError(400, message);
+};
+
+export const unauthorizedError = (message: string) => {
+  return createHttpError(401, message);
 };
 
 export const conflictError = (message: string) => {
