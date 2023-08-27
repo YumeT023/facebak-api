@@ -42,8 +42,8 @@ export const loginUserHandler = async (
 ) => {
   const payload = req.body;
   const user = await getUserByEmail(payload.email);
-  if (!user || payload.username !== user.username) {
-    throw unauthorizedError("Invalid email or username");
+  if (!user) {
+    throw unauthorizedError("Invalid email");
   }
 
   const passwordDoesMatch = await compare(payload.password, user.password);
