@@ -1,0 +1,39 @@
+.main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom right, rgb(255, 94, 0), rgb(195, 0, 255));
+}
+
+.login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.712);
+    gap: 5vh;
+    min-width: 50%;
+    padding-block: 5%;
+    border-radius: 10px;
+}
+
+input{
+    padding-block: 1.5%;
+    width: 60%;
+    text-align: center;
+    border-radius: 20px;
+    border: solid 2px rgb(119, 0, 255);
+    background-color: transparent;
+}
+
+.option-login{
+    font-size: 0.9rem;
+    color: rgb(195, 0, 255);
+    cursor: pointer;
+}
+
+button{
+    border: solid 2px rgb(204, 0, 255);
+}
