@@ -1,11 +1,12 @@
 import {FastifyPluginCallback} from "fastify";
-import {saveCommentHandler, getCommentByPostIdHandler} from "./controller";
+import {getCommentByPostIdHandler, saveCommentHandler} from "./controller";
 import {$ref} from "../shared";
 
 export const commentRoutes: FastifyPluginCallback = (server, _, done) => {
   server.put(
     "/posts/:pid/comments",
     {
+      preHandler: [server.authenticate],
       schema: {
         body: $ref("commentDto"),
       },
@@ -13,7 +14,13 @@ export const commentRoutes: FastifyPluginCallback = (server, _, done) => {
     saveCommentHandler
   );
 
-  server.get("/posts/:pid/comments", getCommentByPostIdHandler);
+  server.get(
+    "/posts/:pid/comments",
+    {
+      preHandler: [server.authenticate],
+    },
+    getCommentByPostIdHandler
+  );
 
   done();
 };

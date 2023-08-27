@@ -23,6 +23,19 @@ export const getUserById = async (uid: string) => {
   return omit(user, ["password"]);
 };
 
+export const getUserByEmail = async (email: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    throw notFoundError("User", "email", email);
+  }
+  return user;
+};
+
 export const createUser = async (data: CreateUserDto) => {
   const {password, confirmPassword, email, ...rest} = data;
 

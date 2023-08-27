@@ -1,5 +1,7 @@
-import fastify from "fastify";
+import fastify, {FastifyReply, FastifyRequest} from "fastify";
 import cors from "@fastify/cors";
+import jwt from "@fastify/jwt";
+import {randomUUID} from "crypto";
 import {commentRoutes} from "./modules/comment";
 import {postRoutes} from "./modules/post";
 import {schemas} from "./modules/shared";
@@ -16,6 +18,24 @@ export const buildServer = (opts: Record<string, unknown> = {}) => {
 
   schemas.forEach((schema) => {
     server.addSchema(schema);
+  });
+
+  server.register(jwt, {
+    // TODO: retrieve this secret from .env
+    secret: randomUUID(),
+  });
+
+  server.decorate("authenticate", async (req: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await req.jwtVerify();
+    } catch (e) {
+      return reply.send(e);
+    }
+  });
+
+  server.addHook("preHandler", (req, reply, next) => {
+    req.jwt = server.jwt;
+    return next();
   });
 
   server.register(cors);
