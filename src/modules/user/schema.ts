@@ -23,9 +23,8 @@ export const updateUserDto = z.object({
 });
 
 export const loginUserDto = z.object({
-  username: z.string(),
   password: z.string(),
-  email: z.string().email(),
+  email: z.string().email()
 });
 
 export type CreateUserDto = z.infer<typeof createUserDto>;
